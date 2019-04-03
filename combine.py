@@ -3,6 +3,16 @@ import os
 
 import json
 
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
+
+Tk().withdraw()
+
+fp1 = askopenfilename(
+    filetypes=[("JSON files", '*.json')])  # show an "Open" dialog box and return the path to the selected file
+fp2 = askopenfilename(
+    filetypes=[("JSON files", '*.json')])  # show an "Open" dialog box and return the path to the selected file
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-a', '--a',
                     help="the path to the first JSON file. The new JSON data will be made in the same directory",
@@ -12,7 +22,7 @@ parser.add_argument('-b', '--b', help="the path to the second JSON file", type=s
 args = parser.parse_args()
 
 try:
-    with open(args.a, 'r') as file_path_1, open(args.b, 'r') as file_path_2:
+    with open(fp1, 'r', errors='ignore') as file_path_1, open(fp2, 'r', errors='ignore') as file_path_2:
         data_1 = json.load(file_path_1)
         data_2 = json.load(file_path_2)
         print(file_path_1, '\n', file_path_2)
@@ -29,8 +39,8 @@ for (team_key, team) in data_2['teams'].items():
         elif scout not in new_data['teams'][team_key]:
             new_data['teams'][team_key].append(scout)
 
-newpath = "{}/{}_{}_combined.json".format(os.path.dirname(args.a), os.path.basename(args.a).split('.')[0],
-                                          os.path.basename(args.b).split('.')[0])
+newpath = "{}/{}_{}_combined.json".format(os.path.dirname(fp1), os.path.basename(fp1).split('.')[0],
+                                          os.path.basename(fp2).split('.')[0])
 
 print(newpath)
 
